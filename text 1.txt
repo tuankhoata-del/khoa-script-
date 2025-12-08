@@ -1,0 +1,113 @@
+local Players = game:GetService("Players")
+
+local TweenService = game:GetService("TweenService")
+
+local RunService = game:GetService("RunService")
+
+local lp = Players.LocalPlayer
+
+local gui = Instance.new("ScreenGui")
+
+gui.Name = "TAS_Fling_GUI"
+
+gui.ResetOnSpawn = false
+
+gui.Parent = lp:WaitForChild("PlayerGui")
+
+local frame = Instance.new("Frame")
+
+frame.Size = UDim2.new(0, 240, 0, 320)
+
+frame.Position = UDim2.new(0, 20, 0, 80)
+
+frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+
+frame.BorderSizePixel = 0
+
+frame.Active = true
+
+frame.Draggable = true
+
+frame.Parent = gui
+
+local title = Instance.new("TextLabel")
+
+title.Size = UDim2.new(1, 0, 0, 30)
+
+title.Text = "FakE TAs Flingable Mode!"
+
+title.TextColor3 = Color3.new(1,1,1)
+
+title.BackgroundTransparency = 1
+
+title.Font = Enum.Font.SourceSansBold
+
+title.TextSize = 16
+
+title.Parent = frame
+
+local saveBtn = Instance.new("TextButton")
+
+saveBtn.Size = UDim2.new(1, -20, 0, 30)
+
+saveBtn.Position = UDim2.new(0, 10, 0, 40)
+
+saveBtn.Text = "Save Position???!?"
+
+saveBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 200)
+
+saveBtn.TextColor3 = Color3.new(1,1,1)
+
+saveBtn.Font = Enum.Font.SourceSansBold
+
+saveBtn.TextSize = 14
+
+saveBtn.Parent = frame
+
+local flingBtn = Instance.new("TextButton")
+
+flingBtn.Size = UDim2.new(1, -20, 0, 30)
+
+flingBtn.Position = UDim2.new(0, 10, 0, 80)
+
+flingBtn.Text = "Turn On now nig."
+
+flingBtn.BackgroundColor3 = Color3.fromRGB(0, 200, 100)
+
+flingBtn.TextColor3 = Color3.new(1,1,1)
+
+flingBtn.Font = Enum.Font.SourceSansBold
+
+flingBtn.TextSize = 14
+
+flingBtn.Parent = frame
+
+local removeBtn = Instance.new("TextButton")
+
+removeBtn.Size = UDim2.new(1, -20, 0, 30)
+
+removeBtn.Position = UDim2.new(0, 10, 0, 120)
+
+removeBtn.Text = "- Remove last Position you nig~>"
+
+removeBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+
+removeBtn.TextColor3 = Color3.new(1,1,1)
+
+removeBtn.Font = Enum.Font.SourceSansBold
+
+removeBtn.TextSize = 14
+
+removeBtn.Parent = frame
+
+local listLabel = Instance.new("TextLabel")
+
+listLabel.Size = UDim2.new(1, -20, 0, 150)
+
+listLabel.Position = UDim2.new(0, 10, 0, 160)
+
+listLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+
+listLabel.BackgroundTransparency = 1
+
+listLabel.Font
