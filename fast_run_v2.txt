@@ -1,30 +1,66 @@
-local RunService = game:GetService("RunService")
+-- Roblox Aimbot and ESP Script
 local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local Workspace = game:GetService("Workspace")
+local Camera = Workspace.CurrentCamera
+local LocalPlayer = Players.LocalPlayer
+local Mouse = LocalPlayer:GetMouse()
 
-local player = Players.LocalPlayer
-local camera = workspace.CurrentCamera
+local ESP_Enabled = true
+local Aimbot_Enabled = true
+local Aimbot_FOV = 360
 
--- Hàm này sẽ được gọi trong vòng lặp RenderStepped
-local function lockTargetToHead(targetHead)
-    if not targetHead then return end
-
-    local cameraPosition = camera.CFrame.Position
-    local targetPosition = targetHead.Position
-    
-    -- CFrame.lookAt sẽ xoay Camera để tâm nhìn thẳng vào targetPosition
-    camera.CFrame = CFrame.lookAt(cameraPosition, targetPosition)
+-- Function: ESP (Highlight Players)
+local function createHighlight(target)
+    if target:FindFirstChild("Highlight") then return end
+    local highlight = Instance.new("Highlight", target)
+    highlight.FillColor = Color3.fromRGB(255, 0, 0)
+    highlight.OutlineTransparency = 1
 end
 
--- Giả sử bạn có biến target được chọn
-local currentTargetHead = nil 
+-- Function: Check Obstructions (Raycasting)
+local function isVisible(targetPart)
+    local origin = Camera.CFrame.Position
+    local direction = (targetPart.Position - origin).Unit * 1000
+    local raycastParams = RaycastParams.new()
+    raycastParams.FilterDescendantsInstances = {LocalPlayer.Character}
+    raycastParams.FilterType = Enum.RaycastFilterType.Exclude
+    
+    local result = Workspace:Raycast(origin, direction, raycastParams)
+    if result and result.Instance:IsDescendantOf(targetPart.Parent) then
+        return true
+    end
+    return false
+end
 
+-- Main Loop
 RunService.RenderStepped:Connect(function()
-    if currentTargetHead then
-        -- Kiểm tra xem đầu còn tồn tại không
-        if currentTargetHead:IsDescendantOf(workspace) then
-            lockTargetToHead(currentTargetHead)
-        else
-            currentTargetHead = nil -- Hủy ghim nếu mục tiêu mất
+    local closestPlayer = nil
+    local shortestDistance = math.huge
+
+    for _, player in pairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("Head") then
+            -- ESP Logic
+            if ESP_Enabled then createHighlight(player.Character) end
+
+            -- Aimbot Logic
+            if Aimbot_Enabled then
+                local head = player.Character.Head
+                local screenPos, onScreen = Camera:WorldToViewportPoint(head.Position)
+                
+                if onScreen and isVisible(head) then
+                    local distance = (Vector2.new(Mouse.X, Mouse.Y) - Vector2.new(screenPos.X, screenPos.Y)).Magnitude
+                    if distance < shortestDistance then
+                        closestPlayer = head
+                        shortestDistance = distance
+                    end
+                end
+            end
         end
+    end
+
+    -- Apply Aimbot
+    if Aimbot_Enabled and closestPlayer then
+        Camera.CFrame = CFrame.new(Camera.CFrame.Position, closestPlayer.Position)
     end
 end)
